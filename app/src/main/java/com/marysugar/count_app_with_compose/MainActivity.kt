@@ -3,36 +3,39 @@ package com.marysugar.count_app_with_compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.marysugar.count_app_with_compose.ui.theme.CountAppWithComposeTheme
+import androidx.compose.runtime.getValue
 
 class MainActivity : ComponentActivity() {
+    private val viewModel by viewModels<CountViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CountAppWithComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
+            CountUp(viewModel = viewModel)
         }
     }
 }
 
+/**
+ * カウントアップボタンとカウントの回数を表示する
+ */
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CountAppWithComposeTheme {
-        Greeting("Android")
+fun CountUp(viewModel: CountViewModel) {
+    val count: Int by viewModel.count
+    
+    Column {
+        Text(text = "$count")
+        Button(onClick = {
+            viewModel.onCountUpTapped()
+        }
+        ) {
+            Text(
+                text = "Count Up!"
+            )
+        }
     }
 }
